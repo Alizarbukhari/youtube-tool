@@ -1,0 +1,23 @@
+
+------install django & other packages------
+pip install django pytube gunicorn youtube_search PyJwt python-dotenv django-ckeditor django-cors-headers Pillow requests --break-system-packages
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+1-Run comand youtube downloader django
+python manage.py runserver
+
+
+http://127.0.0.1:8000/admin/panel/add-new-language
+
+username = admin@mail.com
+password = 1234
+
+# link for login guide video
+https://drive.google.com/drive/folders/1HPH_rpNsCeYeBGWLBMGqPbTXmH2UVtBm
+
+
+# django web link
+https://docs.djangoproject.com/en/5.2/intro/overview/

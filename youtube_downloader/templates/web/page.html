@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="{{current_language.lang}}" dir="{{current_language.dir}}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:site_name" content="{{page_info.meta_title}}">
+    <meta property="og:locale" content="{{current_language.lang}}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.global_data.domain }}{{ page_info.slug }}">
+    <meta name="twitter:site" content="@iloveabc.com">
+    <meta name="twitter:creator" content="@iloveabc.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request.global_data.domain }}{{ page_info.slug }}">
+    <link rel="canonical" href="{{ request.global_data.domain }}{{ page_info.slug }}">    
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/website/images/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/website/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/website/images/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/website/images/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" href="/static/website/images/apple-touch-icon.png">
+    <link rel="manifest" href="/static/website/images/site.webmanifest">
+    <link rel="shortcut icon" href="/static/website/images/favicon.ico">
+    <title>{{page_info.meta_title}}</title>
+    <meta name="description" content="{{page_info.meta_description}}" />
+    <meta property="og:title" content="{{page_info.meta_title}}">
+    <meta property="og:description" content="{{page_info.meta_description}}">
+    <meta name="twitter:title" content="{{page_info.meta_title}}">
+    <meta name="twitter:description" content="{{page_info.meta_description}}">
+	{{ page_info.header|safe }}
+    {{ request.global_data.global_header.header|safe }}
+    <link rel="stylesheet" href="/static/website/icon/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/website/css/style.css">
+
+</head>
+
+<body>
+
+    <main>
+        <nav>
+            <div>
+                <input type="checkbox" class="checkbox" id="checkbox">
+                <label for="checkbox" class="checkbox-label">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                    <span class="ball"></span>
+                </label>
+            </div>
+            <a href="{{current_language.slug}}"><img id="logo" width="auto" height="auto"  src="/static/website/images/logo.svg" alt="Logo"></a>
+            <div class="custom-dropdown">
+                <button class="custom-dropdown-button" onclick="toggleDropdown()">{{current_language.name}}
+                    <span class="arrow"></span>
+                </button>
+                <div class="custom-dropdown-content" id="dropdownContent">
+                    {% for language in request.global_data.languages %}
+                    {% if language.name != page_info.name %}
+                        <a href="{{language.slug}}">{{language.name}}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+        <div class="page-content">{{ page_info.content|safe }}</div>
+        <footer>
+            <p>&copy; {% now "Y" %} {{ request.global_data.domain_name }} - All rights reserved.</p>
+            <div>
+                {% for page in other_pages %}
+                    <a href="{{page.slug}}">{{page.page_name}}</a>
+                {% endfor %}
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        const checkbox = document.getElementById("checkbox");
+        const logo = document.getElementById("logo");
+
+        // Function to update logo based on theme
+        function updateLogo(theme) {
+            if (theme === "dark") {
+                logo.src = "/static/website/images/logo-dark.svg"; // Change to dark logo
+            } else {
+                logo.src = "/static/website/images/logo.svg"; // Change to default logo
+            }
+        }
+
+        // Check local storage for theme preference
+        let currentTheme = localStorage.getItem("theme");
+        if (currentTheme === "dark") {
+            document.body.classList.add("body-dark");
+            checkbox.checked = true;
+            updateLogo("dark");
+        } else {
+            updateLogo("light");
+        }
+
+        checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+                document.body.classList.add("body-dark");
+                localStorage.setItem("theme", "dark");
+                updateLogo("dark");
+            } else {
+                document.body.classList.remove("body-dark");
+                localStorage.setItem("theme", "light");
+                updateLogo("light");
+            }
+        });
+
+
+        function toggleDropdown() {
+            const dropdownContent = document.getElementById("dropdownContent");
+            const dropdownButton = document.querySelector(".custom-dropdown-button");
+            dropdownContent.style.display = (dropdownContent.style.display === "none" || dropdownContent.style.display === "") ? "grid" : "none";
+            dropdownButton.classList.toggle("open");
+        }
+
+        window.onclick = function (event) {
+            try {
+                if (!event.target.closest('.custom-dropdown')) {
+                    const dropdownContent = document.getElementById("dropdownContent");
+                    const dropdownButton = document.querySelector(".custom-dropdown-button");
+                    if (dropdownContent && dropdownContent.style.display === "grid") {
+                        dropdownContent.style.display = "none";
+                        if (dropdownButton) {
+                            dropdownButton.classList.remove("open");
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+        };
+    </script>
+    {{ request.global_data.global_footer.footer|safe }}
+</body>
+
+</html>
